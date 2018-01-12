@@ -388,7 +388,6 @@ public struct ImageMetadata {
             
             self.doDismiss {
                 
-                //self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
             }
             
             return;
@@ -580,13 +579,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
             self.glowButton(self.doneButton)
         }
         fusumaCameraShotDone = true
-        
-        /*
-        self.doDismiss {
 
-            self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
-        }
-       */
     }
     
     public func albumViewCameraRollAuthorized() {
@@ -705,7 +698,6 @@ private extension FusumaViewController {
         default:
             
             self.doneButton.isHidden = true
-            //self.doneButton.isHidden = false
         }
     }
     
