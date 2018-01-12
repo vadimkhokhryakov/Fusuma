@@ -348,16 +348,8 @@ public struct ImageMetadata {
         
         if(self.mode == FusumaMode.camera && fusumaCameraShotDone){
             
-            for lay in self.cameraView.previewViewContainer.layer.sublayers!{
-                lay.removeFromSuperlayer()
-            }
-            if(self.previewImageView != nil){
-                self.previewImageView.removeFromSuperview()
-            }
-            
-            self.cameraView.stopSession()
-            self.cameraView.initialize()
-            fusumaCameraShotDone = false
+            self.restartCameraSession()
+            self.doneButton.isHidden = true
             return
         }
        
@@ -400,6 +392,22 @@ public struct ImageMetadata {
         
         allowMultipleSelection ? fusumaDidFinishInMultipleMode() : fusumaDidFinishInSingleMode()
     }
+    
+    
+    fileprivate func restartCameraSession(){
+        
+        for lay in self.cameraView.previewViewContainer.layer.sublayers!{
+            lay.removeFromSuperlayer()
+        }
+        if(self.previewImageView != nil){
+            self.previewImageView.removeFromSuperview()
+        }
+        
+        self.cameraView.stopSession()
+        self.cameraView.initialize()
+        fusumaCameraShotDone = false
+    }
+    
     
     fileprivate func doDismiss(completion: (() -> Void)?) {
         
@@ -610,6 +618,11 @@ private extension FusumaViewController {
         case .camera:
             
             self.cameraView.stopCamera()
+            
+            if(fusumaCameraShotDone){
+                
+                self.restartCameraSession()
+            }
         
         case .video:
         
