@@ -15,6 +15,7 @@ public protocol FSAlbumViewDelegate: class {
 
     func albumViewCameraRollUnauthorized()
     func albumViewCameraRollAuthorized()
+    func albumViewWillChangeSelectedImage()
 }
 
 final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
@@ -435,6 +436,8 @@ internal extension IndexSet {
 private extension FSAlbumView {
     
     func changeImage(_ asset: PHAsset) {
+        
+        self.delegate?.albumViewWillChangeSelectedImage()
         
         self.imageCropView.image = nil
         self.phAsset = asset

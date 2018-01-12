@@ -592,6 +592,10 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         self.doDismiss(completion: nil)
     }
     
+    public func albumViewWillChangeSelectedImage() {
+        print("Image will selected")
+    }
+    
 }
 
 private extension FusumaViewController {
