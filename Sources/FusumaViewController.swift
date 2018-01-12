@@ -109,6 +109,7 @@ public struct ImageMetadata {
 
     @objc public var cropHeightRatio: CGFloat = 1
     @objc public var allowMultipleSelection: Bool = false
+    @objc public var fusumaDoneButtonColor = UIColor.hex("#424141", alpha: 1.0)
 
     fileprivate var mode: FusumaMode = .library
     
@@ -170,7 +171,7 @@ public struct ImageMetadata {
         cameraButton.tintColor  = fusumaTintColor
         videoButton.tintColor   = fusumaTintColor
         closeButton.tintColor   = fusumaTintColor
-        doneButton.tintColor    = fusumaTintColor
+        doneButton.tintColor = fusumaDoneButtonColor
         
         let bundle     = Bundle(for: self.classForCoder)
         let checkImage = fusumaCheckImage != nil ? fusumaCheckImage : UIImage(named: "ic_check", in: bundle, compatibleWith: nil)
@@ -593,7 +594,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     }
     
     public func albumViewWillChangeSelectedImage() {
-        print("Image will selected")
+        
     }
     
 }
