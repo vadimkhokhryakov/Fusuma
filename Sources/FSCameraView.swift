@@ -108,8 +108,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
           
             self.previewViewContainer.layer.addSublayer(videoLayer!)
           
-            //session.sessionPreset = AVCaptureSession.Preset.photo
-            session.sessionPreset = AVCaptureSession.Preset.medium
+            session.sessionPreset = AVCaptureSession.Preset.photo
           
             session.startRunning()
           
