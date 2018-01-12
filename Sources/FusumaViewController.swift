@@ -152,6 +152,8 @@ public struct ImageMetadata {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.doneButton.transform = self.doneButton.transform.scaledBy(x: 1.5, y: 1.5)
     
         self.view.backgroundColor = fusumaBackgroundColor
         
@@ -418,7 +420,7 @@ public struct ImageMetadata {
         }) { (true) in
             
             UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-                button.transform = button.transform.scaledBy(x: 0.5, y: 0.5)
+                 button.transform = button.transform.scaledBy(x: 0.5, y: 0.5)
             }, completion: nil)
         }
         
