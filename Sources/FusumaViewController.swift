@@ -110,6 +110,7 @@ public struct ImageMetadata {
     @objc public var cropHeightRatio: CGFloat = 1
     @objc public var allowMultipleSelection: Bool = false
     @objc public var fusumaDoneButtonColor = UIColor.hex("#424141", alpha: 1.0)
+    @objc public var fusumaGlowDoneButton = false
 
     fileprivate var mode: FusumaMode = .library
     
@@ -410,6 +411,20 @@ public struct ImageMetadata {
     }
     
     
+    fileprivate func glowButton(_ button: UIButton){
+        
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+            button.transform = button.transform.scaledBy(x: 2, y: 2)
+        }) { (true) in
+            
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                button.transform = button.transform.scaledBy(x: 0.5, y: 0.5)
+            }, completion: nil)
+        }
+        
+    }
+    
+    
     fileprivate func doDismiss(completion: (() -> Void)?) {
         
         if autoDismiss {
@@ -550,8 +565,6 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     // MARK: FSCameraViewDelegate
     func cameraShotFinished(_ image: UIImage) {
         
-        //let cameraRect = self.cameraView.bounds;
-        //let imageView = UIImageView(image: image)
         self.previewImageView = UIImageView(image: image)
         self.previewImageView.frame = self.cameraView.previewViewContainer.frame
         self.previewImageView.contentMode = .scaleAspectFit
@@ -561,9 +574,10 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         delegate?.fusumaImageSelected(image, source: mode)
         
         doneButton.isHidden = false
+        if(self.fusumaGlowDoneButton){
+            self.glowButton(self.doneButton)
+        }
         fusumaCameraShotDone = true
-        
-        //self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
         
         /*
         self.doDismiss {
@@ -595,6 +609,9 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     
     public func albumViewWillChangeSelectedImage() {
         
+        if(self.fusumaGlowDoneButton){
+            self.glowButton(self.doneButton)
+        }
     }
     
 }
