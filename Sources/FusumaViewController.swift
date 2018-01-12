@@ -31,7 +31,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-public protocol FusumaDelegate: class {
+@objc public protocol FusumaDelegate: class {
     
     func fusumaImageSelected(_ image: UIImage, source: FusumaMode)
     func fusumaMultipleImageSelected(_ images: [UIImage], source: FusumaMode)
@@ -39,7 +39,7 @@ public protocol FusumaDelegate: class {
     func fusumaCameraRollUnauthorized()
     
     // optional
-    func fusumaImageSelected(_ image: UIImage, source: FusumaMode, metaData: ImageMetadata)
+    //func fusumaImageSelected(_ image: UIImage, source: FusumaMode, metaData: ImageMetadata)
     func fusumaDismissedWithImage(_ image: UIImage, source: FusumaMode)
     func fusumaClosed()
     func fusumaWillClosed()
@@ -76,6 +76,8 @@ public var fusumaCameraTitle     = "Photo"
 public var fusumaVideoTitle      = "Video"
 public var fusumaTitleFont       = UIFont(name: "AvenirNext-DemiBold", size: 15)
 
+public var fusumaCameraShotDone = false
+
 public var autoDismiss: Bool = true
 
 @objc public enum FusumaMode: Int {
@@ -105,8 +107,8 @@ public struct ImageMetadata {
 
 @objc public class FusumaViewController: UIViewController {
 
-    public var cropHeightRatio: CGFloat = 1
-    public var allowMultipleSelection: Bool = false
+    @objc public var cropHeightRatio: CGFloat = 1
+    @objc public var allowMultipleSelection: Bool = false
 
     fileprivate var mode: FusumaMode = .library
     
@@ -128,13 +130,15 @@ public struct ImageMetadata {
     lazy var albumView  = FSAlbumView.instance()
     lazy var cameraView = FSCameraView.instance()
     lazy var videoView  = FSVideoCameraView.instance()
+    
+    var previewImageView: UIImageView!
 
     fileprivate var hasGalleryPermission: Bool {
         
         return PHPhotoLibrary.authorizationStatus() == .authorized
     }
     
-    public weak var delegate: FusumaDelegate? = nil
+    @objc public weak var delegate: FusumaDelegate? = nil
     
     override public func loadView() {
         
@@ -341,6 +345,24 @@ public struct ImageMetadata {
     
     @IBAction func closeButtonPressed(_ sender: UIButton) {
         
+        
+        if(self.mode == FusumaMode.camera && fusumaCameraShotDone){
+            
+            for lay in self.cameraView.previewViewContainer.layer.sublayers!{
+                lay.removeFromSuperlayer()
+            }
+            if(self.previewImageView != nil){
+                self.previewImageView.removeFromSuperview()
+            }
+            
+            self.cameraView.stopSession()
+            self.cameraView.initialize()
+            fusumaCameraShotDone = false
+            return
+        }
+       
+        
+        
         self.delegate?.fusumaWillClosed()
         
         self.doDismiss {
@@ -365,6 +387,16 @@ public struct ImageMetadata {
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
+        
+        if(self.mode == FusumaMode.camera){
+            
+            self.doDismiss {
+                
+                //self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
+            }
+            
+            return;
+        }
         
         allowMultipleSelection ? fusumaDidFinishInMultipleMode() : fusumaDidFinishInSingleMode()
     }
@@ -509,12 +541,27 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
     // MARK: FSCameraViewDelegate
     func cameraShotFinished(_ image: UIImage) {
         
+        //let cameraRect = self.cameraView.bounds;
+        //let imageView = UIImageView(image: image)
+        self.previewImageView = UIImageView(image: image)
+        self.previewImageView.frame = self.cameraView.previewViewContainer.frame
+        self.previewImageView.contentMode = .scaleAspectFit
+        
+        self.cameraView.addSubview(self.previewImageView)
+        
         delegate?.fusumaImageSelected(image, source: mode)
         
+        doneButton.isHidden = false
+        fusumaCameraShotDone = true
+        
+        //self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
+        
+        /*
         self.doDismiss {
 
             self.delegate?.fusumaDismissedWithImage(image, source: self.mode)
         }
+       */
     }
     
     public func albumViewCameraRollAuthorized() {
@@ -621,6 +668,7 @@ private extension FusumaViewController {
         default:
             
             self.doneButton.isHidden = true
+            //self.doneButton.isHidden = false
         }
     }
     

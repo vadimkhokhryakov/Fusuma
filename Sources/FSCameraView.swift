@@ -46,6 +46,12 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         return UINib(nibName: "FSCameraView", bundle: Bundle(for: self.classForCoder())).instantiate(withOwner: self, options: nil)[0] as! FSCameraView
     }
     
+    
+    func stopSession(){
+        session = nil
+    }
+    
+    
     func initialize() {
         
         if session != nil { return }
@@ -102,7 +108,8 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
           
             self.previewViewContainer.layer.addSublayer(videoLayer!)
           
-            session.sessionPreset = AVCaptureSession.Preset.photo
+            //session.sessionPreset = AVCaptureSession.Preset.photo
+            session.sessionPreset = AVCaptureSession.Preset.medium
           
             session.startRunning()
           
@@ -179,13 +186,17 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
             return
         }
         
+        
         DispatchQueue.global(qos: .default).async(execute: { () -> Void in
 
             let videoConnection = imageOutput.connection(with: AVMediaType.video)
             
+            
             imageOutput.captureStillImageAsynchronously(from: videoConnection!) { (buffer, error) -> Void in
                 
+                
                 self.stopCamera()
+                
                 
                 guard let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer!),
                     let image = UIImage(data: data),
@@ -195,6 +206,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                         
                         return
                 }
+                
                 
                 let rect   = videoLayer.metadataOutputRectConverted(fromLayerRect: videoLayer.bounds)
                 let width  = CGFloat(cgImage.width)
