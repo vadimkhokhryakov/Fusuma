@@ -356,12 +356,7 @@ public struct ImageMetadata {
             
             self.restartCameraSession()
             self.doneButton.isHidden = true
-            
-            let bundle     = Bundle(for: self.classForCoder)
-            let closeImage = fusumaCloseImage != nil ? fusumaCloseImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
-            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
-            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+            self.restoreCloseImage()
             
             return
         }
@@ -432,6 +427,16 @@ public struct ImageMetadata {
             }, completion: nil)
         }
         
+    }
+    
+    
+    fileprivate func restoreCloseImage(){
+        
+        let bundle     = Bundle(for: self.classForCoder)
+        let closeImage = fusumaCloseImage != nil ? fusumaCloseImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
     }
     
     
@@ -663,10 +668,11 @@ private extension FusumaViewController {
             self.videoView.stopCamera()
         
         default:
-        
+            
             break
         }
         
+        self.restoreCloseImage()
         self.mode = mode
         
         dishighlightButtons()
