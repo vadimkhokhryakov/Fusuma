@@ -654,12 +654,17 @@ private extension FusumaViewController {
         
         switch self.mode {
             
+        case .library:
+            if(fusumaCameraShotDone){
+                self.restoreCloseImage()
+            }
+            
         case .camera:
             
             self.cameraView.stopCamera()
             
             if(fusumaCameraShotDone){
-                
+                self.restoreCloseImage()
                 self.restartCameraSession()
             }
         
@@ -672,7 +677,6 @@ private extension FusumaViewController {
             break
         }
         
-        self.restoreCloseImage()
         self.mode = mode
         
         dishighlightButtons()
