@@ -64,6 +64,7 @@ public var fusumaFlashOffImage: UIImage?
 public var fusumaFlipImage: UIImage?
 public var fusumaShotImage: UIImage?
 
+
 public var fusumaVideoStartImage: UIImage?
 public var fusumaVideoStopImage: UIImage?
 
@@ -111,6 +112,7 @@ public struct ImageMetadata {
     @objc public var allowMultipleSelection: Bool = false
     @objc public var fusumaDoneButtonColor = UIColor.hex("#424141", alpha: 1.0)
     @objc public var fusumaGlowDoneButton = false
+    @objc public var fusumaRetakeImage: UIImage?
 
     fileprivate var mode: FusumaMode = .library
     
@@ -354,6 +356,13 @@ public struct ImageMetadata {
             
             self.restartCameraSession()
             self.doneButton.isHidden = true
+            
+            let bundle     = Bundle(for: self.classForCoder)
+            let closeImage = fusumaCloseImage != nil ? fusumaCloseImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
+            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+            closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+            
             return
         }
        
@@ -573,6 +582,14 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         self.cameraView.addSubview(self.previewImageView)
         
         delegate?.fusumaImageSelected(image, source: mode)
+        
+        
+        let bundle     = Bundle(for: self.classForCoder)
+        let closeImage = fusumaRetakeImage != nil ? fusumaRetakeImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+        
         
         doneButton.isHidden = false
         if(self.fusumaGlowDoneButton){
