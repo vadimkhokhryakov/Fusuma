@@ -182,6 +182,10 @@ public struct ImageMetadata {
         let checkImage = fusumaCheckImage != nil ? fusumaCheckImage : UIImage(named: "ic_check", in: bundle, compatibleWith: nil)
         let closeImage = fusumaCloseImage != nil ? fusumaCloseImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
         
+        if(fusumaRetakeImage == nil){
+            fusumaRetakeImage = fusumaCloseImage
+        }
+        
         closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
         doneButton.setImage(checkImage?.withRenderingMode(.alwaysTemplate), for: .normal)
         closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
@@ -589,11 +593,9 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         delegate?.fusumaImageSelected(image, source: mode)
         
         
-        let bundle     = Bundle(for: self.classForCoder)
-        let closeImage = fusumaRetakeImage != nil ? fusumaRetakeImage : UIImage(named: "ic_close", in: bundle, compatibleWith: nil)
-        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
-        closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+        closeButton.setImage(fusumaRetakeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        closeButton.setImage(fusumaRetakeImage?.withRenderingMode(.alwaysTemplate), for: .selected)
+        closeButton.setImage(fusumaRetakeImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
         
         
         doneButton.isHidden = false
