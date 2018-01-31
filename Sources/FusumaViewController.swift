@@ -131,6 +131,7 @@ public struct ImageMetadata {
     @IBOutlet weak var videoButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     
+    
     lazy var albumView  = FSAlbumView.instance()
     lazy var cameraView = FSCameraView.instance()
     lazy var videoView  = FSVideoCameraView.instance()
@@ -302,8 +303,8 @@ public struct ImageMetadata {
                 attribute: NSLayoutAttribute.width,
                 multiplier: heightRatio,
                 constant: 0)
-            cameraView.fullAspectRatioConstraint.isActive     = false
-            cameraView.croppedAspectRatioConstraint?.isActive = true
+            cameraView.fullAspectRatioConstraint.isActive     = true
+            cameraView.croppedAspectRatioConstraint?.isActive = false
             
         } else {
             
@@ -586,7 +587,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         
         self.previewImageView = UIImageView(image: image)
         self.previewImageView.frame = self.cameraView.previewViewContainer.frame
-        self.previewImageView.contentMode = .scaleAspectFit
+        //self.previewImageView.contentMode = .scaleAspectFit
         
         self.cameraView.addSubview(self.previewImageView)
         
