@@ -587,7 +587,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         
         self.previewImageView = UIImageView(image: image)
         self.previewImageView.frame = self.cameraView.previewViewContainer.frame
-        //self.previewImageView.contentMode = .scaleAspectFit
+        self.previewImageView.isUserInteractionEnabled = true
         
         self.cameraView.addSubview(self.previewImageView)
         
@@ -768,4 +768,5 @@ private extension FusumaViewController {
             return videoButton
         }
     }
+    
 }
