@@ -137,6 +137,7 @@ public struct ImageMetadata {
     lazy var videoView  = FSVideoCameraView.instance()
     
     var previewImageView: UIImageView!
+    var cameraPhoto: UIImage!
 
     fileprivate var hasGalleryPermission: Bool {
         
@@ -395,6 +396,7 @@ public struct ImageMetadata {
         
         if(self.mode == FusumaMode.camera){
             
+            self.delegate?.fusumaImageSelected(self.cameraPhoto, source: self.mode)
             self.doDismiss {
                 
             }
@@ -590,8 +592,7 @@ extension FusumaViewController: FSAlbumViewDelegate, FSCameraViewDelegate, FSVid
         self.previewImageView.isUserInteractionEnabled = true
         
         self.cameraView.addSubview(self.previewImageView)
-        
-        delegate?.fusumaImageSelected(image, source: mode)
+        self.cameraPhoto = image;
         
         
         closeButton.setImage(fusumaRetakeImage?.withRenderingMode(.alwaysTemplate), for: .normal)
