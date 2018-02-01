@@ -93,6 +93,10 @@ public var autoDismiss: Bool = true
     }
 }
 
+struct Constants{
+    static let DONE_BUTTON_SCALE_FACTOR: CGFloat = 1.5
+}
+
 public struct ImageMetadata {
     public let mediaType: PHAssetMediaType
     public let pixelWidth: Int
@@ -157,7 +161,7 @@ public struct ImageMetadata {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.doneButton.transform = self.doneButton.transform.scaledBy(x: 1.5, y: 1.5)
+        self.doneButton.transform = CGAffineTransform.init(scaleX: Constants.DONE_BUTTON_SCALE_FACTOR, y: Constants.DONE_BUTTON_SCALE_FACTOR)
     
         self.view.backgroundColor = fusumaBackgroundColor
         
@@ -426,11 +430,11 @@ public struct ImageMetadata {
     fileprivate func glowButton(_ button: UIButton){
         
         UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-            button.transform = button.transform.scaledBy(x: 2, y: 2)
+            button.transform = CGAffineTransform.init(scaleX: Constants.DONE_BUTTON_SCALE_FACTOR*2.0, y: Constants.DONE_BUTTON_SCALE_FACTOR*2.0)
         }) { (true) in
             
             UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
-                 button.transform = button.transform.scaledBy(x: 0.5, y: 0.5)
+                button.transform = CGAffineTransform.init(scaleX: Constants.DONE_BUTTON_SCALE_FACTOR, y: Constants.DONE_BUTTON_SCALE_FACTOR)
             }, completion: nil)
         }
         
